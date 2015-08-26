@@ -1,6 +1,6 @@
 require "./value_object"
 
-describe "a value object" do
+describe "ValueObject" do
 
   class Point
     extend ValueObject
@@ -20,7 +20,7 @@ describe "a value object" do
     expect(a_value_object.y).to eq(3)
   end
 
-  it "provides value object equality" do
+  it "provides equality based on fields values" do
     a_value_object = Point.new(5, 3)
     same_value_object = Point.new(5, 3)
     different_value_object = Point.new(6, 3)
@@ -35,13 +35,13 @@ describe "a value object" do
     expect(a_value_object.to_a).to eq([5, 3])
   end
 
-  it "forces invariants declarated on all fields" do
+  it "forces declared invariants" do
     expect{Point.new(-5, 3)}.to raise_error(
       ViolatedInvariant, "Fields values [-5, 3] violate invariant inside_first_cuadrant"
     )
   end
 
-  it "provides a built-in invariant for integer values" do
+  it "provides a built-in invariant to force that all fields are integer values" do
     expect{Point.new(5.2, 3)}.to raise_error(
       ViolatedInvariant, "Fields values [5.2, 3] violate invariant integers"
     )
