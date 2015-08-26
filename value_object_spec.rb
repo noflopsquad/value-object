@@ -13,7 +13,7 @@ describe "a value object" do
     end
   end
 
-  it "declaratively generates a constructor, fields and accessors" do
+  it "generates constructor, fields and accessors for declared fields" do
     a_value_object = Point.new(5, 3)
 
     expect(a_value_object.x).to eq(5)
