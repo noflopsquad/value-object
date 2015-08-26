@@ -31,10 +31,6 @@ module ValueObject
       names.map { |field| send(field) }
     end
 
-    define_method(:to_a) do
-      values
-    end
-
     define_method(:eql?) do |other|
       self.class == other.class && values == other.values
     end

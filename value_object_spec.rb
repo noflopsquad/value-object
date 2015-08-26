@@ -29,12 +29,6 @@ describe "ValueObject" do
     expect(a_value_object).to_not eq(different_value_object)
   end
 
-  it "provides a to_a method" do
-    a_value_object = Point.new(5, 3)
-
-    expect(a_value_object.to_a).to eq([5, 3])
-  end
-
   it "forces declared invariants" do
     expect{Point.new(-5, 3)}.to raise_error(
       ViolatedInvariant, "Fields values [-5, 3] violate invariant inside_first_cuadrant"
