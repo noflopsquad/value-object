@@ -38,6 +38,10 @@ module ValueObject
     define_method(:==) do |other|
       eql?(other)
     end
+
+    define_method(:hash) do
+      self.class.hash ^ values.hash
+    end
   end
 
   def invariants(*predicates)

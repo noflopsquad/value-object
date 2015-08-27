@@ -52,4 +52,14 @@ describe "ValueObject" do
       NotImplementedInvariant, "The invariant not_implemented is not implemented"
     )
   end
+
+  it "provides hash code generation" do
+    a_value_object = Point.new(5, 3)
+    same_value_object = Point.new(5, 3)
+    different_value_object = Point.new(6, 3)
+
+    expect(a_value_object.hash).to eq(same_value_object.hash)
+    expect(a_value_object.hash).to_not eq(different_value_object)
+  end
+
 end
