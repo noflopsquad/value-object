@@ -1,6 +1,6 @@
 class NotImplementedInvariant < Exception
   def initialize(name)
-    super "The invariant #{name} is not implemented"
+    super "Invariant #{name} needs to be implemented"
   end
 end
 

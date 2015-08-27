@@ -60,7 +60,7 @@ describe "ValueObject" do
       end
 
       expect{Dummy.new(5)}.to raise_error(
-        NotImplementedInvariant, "The invariant not_implemented is not implemented"
+        NotImplementedInvariant, "Invariant not_implemented needs to be implemented"
       )
     end
 
