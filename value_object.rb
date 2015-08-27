@@ -6,7 +6,7 @@ end
 
 class ViolatedInvariant < Exception
   def initialize(name, wrong_values)
-    super "Fields values " + wrong_values.to_s + " violate invariant #{name}"
+    super "Fields values " + wrong_values.to_s + " violate invariant: #{name}"
   end
 end
 

@@ -48,7 +48,7 @@ describe "ValueObject" do
       end
 
       expect{Point.new(-5, 3)}.to raise_error(
-        ViolatedInvariant, "Fields values [-5, 3] violate invariant inside_first_cuadrant"
+        ViolatedInvariant, "Fields values [-5, 3] violate invariant: inside_first_cuadrant"
       )
     end
 
@@ -72,7 +72,7 @@ describe "ValueObject" do
       end
 
       expect{IntegersPair.new(5.2, 3)}.to raise_error(
-        ViolatedInvariant, "Fields values [5.2, 3] violate invariant integers"
+        ViolatedInvariant, "Fields values [5.2, 3] violate invariant: integers"
       )
     end
   end
