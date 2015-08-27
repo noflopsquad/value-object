@@ -1,8 +1,8 @@
 module ValueObjects
   module ValueObject
     BUILT_IN_INVARIANTS = {
-      :integers => Proc.new do |obj|
-        obj.values.all? {|value| value.is_a? Integer}
+      :integers => Proc.new do |values|
+        values.all? {|value| value.is_a? Integer}
       end
     }
 
@@ -24,6 +24,7 @@ module ValueObjects
       define_method(:values) do
         names.map { |field| send(field) }
       end
+      protected(:values)
 
       define_method(:eql?) do |other|
         self.class == other.class && values == other.values
@@ -52,7 +53,7 @@ module ValueObjects
         rescue
           predicate = BUILT_IN_INVARIANTS[predicate_symbol]
           raise NotImplementedInvariant.new(predicate_symbol) unless predicate
-          valid = predicate.call(self)
+          valid = predicate.call(self.values)
         end
       end
       private(:invariant_holds?)
