@@ -11,6 +11,12 @@ module ValueObjects
     end
   end
 
+  class NotDeclaredFields < Exception
+    def initialize()
+      super "At least one field must be declared"
+    end
+  end
+
   module ValueObject
     BUILT_IN_INVARIANTS = {
       :integers => Proc.new do |obj|
@@ -19,6 +25,8 @@ module ValueObjects
     }
 
     def fields(*names)
+      raise NotDeclaredFields.new() if names.empty?()
+
       attr_reader(*names)
 
       define_method(:check_invariants) do

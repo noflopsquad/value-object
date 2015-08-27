@@ -34,6 +34,17 @@ describe "ValueObject" do
     end
   end
 
+  describe "restrictions" do
+    it "must at least have one declared field" do
+      expect do
+        class DummyWithNoFieldsUsingFieldsMethod
+          extend ValueObjects::ValueObject
+          fields
+        end
+      end.to raise_error(ValueObjects::NotDeclaredFields)
+    end
+  end
+
   describe "forcing invariants" do
     it "forces declared invariants" do
       class Point
