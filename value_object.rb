@@ -52,7 +52,7 @@ module ValueObjects
         rescue
           predicate = BUILT_IN_INVARIANTS[predicate_symbol]
           raise NotImplementedInvariant.new(predicate_symbol) unless predicate
-          valid = predicate.call(self) if predicate
+          valid = predicate.call(self)
         end
       end
       private(:invariant_holds?)
