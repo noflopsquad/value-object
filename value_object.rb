@@ -38,20 +38,20 @@ module ValueObjects
       end
     end
 
-    def invariants(*predicates)
+    def invariants(*predicate_symbols)
       define_method(:check_invariants) do
-        predicates.each do |predicate|
+        predicate_symbols.each do |predicate_symbol|
           begin
-            res = send(predicate)
+            valid = send(predicate_symbol)
           rescue
-            proc = BUILT_IN_INVARIANTS[predicate]
+            predicate = BUILT_IN_INVARIANTS[predicate_symbol]
 
-            raise NotImplementedInvariant.new(predicate) unless proc
+            raise NotImplementedInvariant.new(predicate_symbol) unless predicate
 
-            res = proc.call(self) if proc
+            valid = predicate.call(self) if predicate
           end
 
-          raise ViolatedInvariant.new(predicate, self.values) unless res
+          raise ViolatedInvariant.new(predicate_symbol, self.values) unless valid
         end
       end
     end
