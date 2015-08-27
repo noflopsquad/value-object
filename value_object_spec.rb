@@ -62,4 +62,13 @@ describe "ValueObject" do
     expect(a_value_object.hash).to_not eq(different_value_object)
   end
 
+  it "works wihout invariants" do
+    class DummyWithNoInvariants
+      extend ValueObject
+      fields :x
+    end
+
+    DummyWithNoInvariants.new(5)
+  end
+
 end

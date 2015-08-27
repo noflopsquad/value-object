@@ -20,11 +20,14 @@ module ValueObject
   def fields(*names)
     attr_reader(*names)
 
+    define_method(:check_invariant) do
+    end
+
     define_method(:initialize) do |*values|
       names.zip(values) do |name, value|
         instance_variable_set(:"@#{name}", value)
       end
-      check_invariant
+      check_invariant()
     end
 
     define_method(:values) do
