@@ -4,7 +4,7 @@ describe "ValueObject" do
 
   describe "standard functionality" do
     class Point
-      extend ValueObject
+      extend ValueObjects::ValueObject
       fields :x, :y
     end
 
@@ -37,7 +37,7 @@ describe "ValueObject" do
   describe "forcing invariants" do
     it "forces declared invariants" do
       class Point
-        extend ValueObject
+        extend ValueObjects::ValueObject
         fields :x, :y
         invariants :inside_first_cuadrant
 
@@ -47,32 +47,32 @@ describe "ValueObject" do
         end
       end
 
-      expect{Point.new(-5, 3)}.to raise_error(
-        ViolatedInvariant, "Fields values [-5, 3] violate invariant: inside_first_cuadrant"
+      expect{ Point.new(-5, 3) }.to raise_error(
+        ValueObjects::ViolatedInvariant, "Fields values [-5, 3] violate invariant: inside_first_cuadrant"
       )
     end
 
     it "raises an exception when a declared invariant has not been implemented" do
       class Dummy
-        extend ValueObject
+        extend ValueObjects::ValueObject
         fields :x
         invariants :not_implemented
       end
 
-      expect{Dummy.new(5)}.to raise_error(
-        NotImplementedInvariant, "Invariant not_implemented needs to be implemented"
+      expect{ Dummy.new(5) }.to raise_error(
+        ValueObjects::NotImplementedInvariant, "Invariant not_implemented needs to be implemented"
       )
     end
 
     it "provides a built-in invariant to force that all fields are integer values" do
       class IntegersPair
-        extend ValueObject
+        extend ValueObjects::ValueObject
         fields :a, :b
         invariants :integers
       end
 
-      expect{IntegersPair.new(5.2, 3)}.to raise_error(
-        ViolatedInvariant, "Fields values [5.2, 3] violate invariant: integers"
+      expect{ IntegersPair.new(5.2, 3) }.to raise_error(
+        ValueObjects::ViolatedInvariant, "Fields values [5.2, 3] violate invariant: integers"
       )
     end
   end
