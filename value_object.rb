@@ -41,19 +41,21 @@ module ValueObjects
     def invariants(*predicate_symbols)
       define_method(:check_invariants) do
         predicate_symbols.each do |predicate_symbol|
-          begin
-            valid = send(predicate_symbol)
-          rescue
-            predicate = BUILT_IN_INVARIANTS[predicate_symbol]
-
-            raise NotImplementedInvariant.new(predicate_symbol) unless predicate
-
-            valid = predicate.call(self) if predicate
-          end
-
+          valid = invariant_holds?(predicate_symbol)
           raise ViolatedInvariant.new(predicate_symbol, self.values) unless valid
         end
       end
+
+      define_method(:invariant_holds?) do |predicate_symbol|
+        begin
+          valid = send(predicate_symbol)
+        rescue
+          predicate = BUILT_IN_INVARIANTS[predicate_symbol]
+          raise NotImplementedInvariant.new(predicate_symbol) unless predicate
+          valid = predicate.call(self) if predicate
+        end
+      end
+      private(:invariant_holds?)
     end
   end
 
