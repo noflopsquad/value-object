@@ -1,22 +1,4 @@
 module ValueObjects
-  class NotImplementedInvariant < Exception
-    def initialize(name)
-      super "Invariant #{name} needs to be implemented"
-    end
-  end
-
-  class ViolatedInvariant < Exception
-    def initialize(name, wrong_values)
-      super "Fields values " + wrong_values.to_s + " violate invariant: #{name}"
-    end
-  end
-
-  class NotDeclaredFields < Exception
-    def initialize()
-      super "At least one field must be declared"
-    end
-  end
-
   module ValueObject
     BUILT_IN_INVARIANTS = {
       :integers => Proc.new do |obj|
@@ -72,6 +54,24 @@ module ValueObjects
           raise ViolatedInvariant.new(predicate, self.values) unless res
         end
       end
+    end
+  end
+
+  class NotImplementedInvariant < Exception
+    def initialize(name)
+      super "Invariant #{name} needs to be implemented"
+    end
+  end
+
+  class ViolatedInvariant < Exception
+    def initialize(name, wrong_values)
+      super "Fields values " + wrong_values.to_s + " violate invariant: #{name}"
+    end
+  end
+
+  class NotDeclaredFields < Exception
+    def initialize()
+      super "At least one field must be declared"
     end
   end
 end
