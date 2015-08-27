@@ -20,14 +20,14 @@ module ValueObject
   def fields(*names)
     attr_reader(*names)
 
-    define_method(:check_invariant) do
+    define_method(:check_invariants) do
     end
 
     define_method(:initialize) do |*values|
       names.zip(values) do |name, value|
         instance_variable_set(:"@#{name}", value)
       end
-      check_invariant()
+      check_invariants()
     end
 
     define_method(:values) do
@@ -48,7 +48,7 @@ module ValueObject
   end
 
   def invariants(*predicates)
-    define_method(:check_invariant) do
+    define_method(:check_invariants) do
       predicates.each do |predicate|
         begin
           res = send(predicate)
