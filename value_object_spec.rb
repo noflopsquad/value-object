@@ -50,16 +50,24 @@ describe "ValueObject" do
       class Point
         extend ValueObjects::ValueObject
         fields :x, :y
-        invariants :inside_first_cuadrant
+        invariants :x_less_than_y, :inside_first_cuadrant
 
         private
         def inside_first_cuadrant
           x > 0 && y > 0
         end
+
+        def x_less_than_y
+          x < y
+        end
       end
 
       expect{ Point.new(-5, 3) }.to raise_error(
         ValueObjects::ViolatedInvariant, "Fields values [-5, 3] violate invariant: inside_first_cuadrant"
+      )
+
+      expect{ Point.new(6, 3) }.to raise_error(
+        ValueObjects::ViolatedInvariant, "Fields values [6, 3] violate invariant: x_less_than_y"
       )
     end
 
