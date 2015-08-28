@@ -64,26 +64,14 @@ describe "ValueObject" do
     end
 
     it "raises an exception when a declared invariant has not been implemented" do
-      class Dummy
+      class PairOfIntegers
         extend ValueObjects::ValueObject
-        fields :x
-        invariants :not_implemented
-      end
-
-      expect{ Dummy.new(5) }.to raise_error(
-        ValueObjects::NotImplementedInvariant, "Invariant not_implemented needs to be implemented"
-      )
-    end
-
-    it "provides a built-in invariant to force that all fields are integer values" do
-      class IntegersPair
-        extend ValueObjects::ValueObject
-        fields :a, :b
+        fields :x, :y
         invariants :integers
       end
 
-      expect{ IntegersPair.new(5.2, 3) }.to raise_error(
-        ValueObjects::ViolatedInvariant, "Fields values [5.2, 3] violate invariant: integers"
+      expect{ PairOfIntegers.new(5, 2) }.to raise_error(
+        ValueObjects::NotImplementedInvariant, "Invariant integers needs to be implemented"
       )
     end
   end

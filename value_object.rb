@@ -1,11 +1,5 @@
 module ValueObjects
   module ValueObject
-    BUILT_IN_INVARIANTS = {
-      :integers => Proc.new do |values|
-        values.all? {|value| value.is_a? Integer}
-      end
-    }
-
     def fields(*names)
       raise NotDeclaredFields.new() if names.empty?()
 
@@ -51,9 +45,7 @@ module ValueObjects
         begin
           valid = send(predicate_symbol)
         rescue
-          predicate = BUILT_IN_INVARIANTS[predicate_symbol]
-          raise NotImplementedInvariant.new(predicate_symbol) unless predicate
-          valid = predicate.call(self.values)
+          raise NotImplementedInvariant.new(predicate_symbol)
         end
       end
       private(:invariant_holds?)
