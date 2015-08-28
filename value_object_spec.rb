@@ -2,7 +2,7 @@ require "./value_object"
 
 describe "ValueObject" do
 
-  describe "standard functionality" do
+  describe "standard behavior" do
     class Point
       extend ValueObjects::ValueObject
       fields :x, :y
