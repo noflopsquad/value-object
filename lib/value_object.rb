@@ -10,16 +10,23 @@ module ValueObject
     end
     private(:check_invariants)
 
+    define_method(:uninitialized_fields) do |values|
+      names.zip(values).select { |name, value| value.nil? }
+    end
+    private(:uninitialized_fields)
+
+    define_method(:uninitialized_fields_names) do |values|
+      uninitialized_fields(values).map { |field| field.first }
+    end
+    private(:uninitialized_fields_names)
+
     define_method(:check_fields_are_initialized) do |values|
       fields_number = names.length
       arguments_number = values.length
+      right_arguments = fields_number == arguments_number
 
-      raise WrongNumberOfArguments.new(fields_number, arguments_number) unless fields_number == arguments_number
-
-      uninitialized_fields = names.zip(values).select { |name, value| value.nil? }
-      uninitialized_fields_names = uninitialized_fields.map { |field| field.first }
-      
-      raise FieldWithoutValue.new(uninitialized_fields_names) unless uninitialized_fields.empty?
+      raise WrongNumberOfArguments.new(fields_number, arguments_number) unless right_arguments      
+      raise FieldWithoutValue.new(uninitialized_fields_names(values)) unless uninitialized_fields(values).empty?
     end
     private(:check_fields_are_initialized)
 
