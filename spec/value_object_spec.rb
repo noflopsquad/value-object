@@ -35,46 +35,43 @@ describe "ValueObject" do
   end
 
   describe "restrictions" do
-    it "must at least have one declared field" do
-      expect do
-        class DummyWithNoFieldsUsingFieldsMethod
+    describe "on declaration" do
+      it "must at least have one field" do
+        expect do
+          class DummyWithNoFieldsUsingFieldsMethod
+            extend ValueObject
+            fields
+          end
+        end.to raise_error(ValueObject::NotDeclaredFields)
+      end
+    end
+
+    describe "on initialization" do
+      it "must not have any field initialized to nil" do
+        class DummyWithDeclaredFieldsWithoutValue
           extend ValueObject
-          fields
+          fields :x, :y
         end
-      end.to raise_error(ValueObject::NotDeclaredFields)
-    end
 
-    it "a declared field can't be nil" do
-      class DummyWithDeclaredFieldsWithoutValue
-        extend ValueObject
-        fields :x, :y
+        expect{
+          DummyWithDeclaredFieldsWithoutValue.new 1, nil
+          }.to raise_error(ValueObject::FieldWithoutValue, "Declared fields [:y] must have value")
+        
       end
-
-      expect{
-        DummyWithDeclaredFieldsWithoutValue.new 1, nil
-        }.to raise_error(ValueObject::FieldWithoutValue, "Declared fields [:y] must have value")
       
-    end
-    
-    it "must have value for each declared field" do
-      class DummyWithDeclaredFieldsWithoutValue
-        extend ValueObject
-        fields :field
+      it "must have number of values equal to number of fields" do
+        class Point
+          extend ValueObject
+          fields :x, :y
+        end
+ 
+        expect{
+          Point.new(1)
+          }.to raise_error(ValueObject::WrongNumberOfArguments)
+        
+
+        expect{ Point.new(1, 2, 3) }.to raise_error(ValueObject::WrongNumberOfArguments, "Declared 2 fields but passing 3")
       end
-
-      expect{
-        DummyWithDeclaredFieldsWithoutValue.new
-        }.to raise_error(ValueObject::WrongNumberOfArguments)
-    end
-
-
-    it "can't be initialized with more values than the declared fields" do
-      class Point
-        extend ValueObject
-        fields :x, :y
-      end
-
-      expect{ Point.new 1, 2, 3 }.to raise_error(ValueObject::WrongNumberOfArguments, "Declared 2 fields but passing 3")
     end
   end
 
