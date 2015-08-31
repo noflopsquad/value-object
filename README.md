@@ -119,4 +119,7 @@ ValueObject::ViolatedInvariant: Fields values [-5, 3] violate invariant: inside_
 
 Point.new(6, 3)
 ValueObject::ViolatedInvariant: Fields values [6, 3] violate invariant: x_less_than_y
+
+Point.new(1, 3)
+=> #<Point:0x894aacc @x=1, @y=3>
 ```
