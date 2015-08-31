@@ -15,6 +15,11 @@ module ValueObject
     end
     private(:uninitialized_fields)
 
+    define_method(:all_fields_initialized?) do |values|
+      uninitialized_fields(values).empty?
+    end
+    private(:all_fields_initialized?)
+
     define_method(:uninitialized_fields_names) do |values|
       uninitialized_fields(values).map { |field| field.first }
     end
@@ -23,10 +28,9 @@ module ValueObject
     define_method(:check_fields_are_initialized) do |values|
       fields_number = names.length
       arguments_number = values.length
-      arguments_are_right = fields_number == arguments_number
-
-      raise WrongNumberOfArguments.new(fields_number, arguments_number) unless arguments_are_right
-      raise FieldWithoutValue.new(uninitialized_fields_names(values)) unless uninitialized_fields(values).empty?
+      arguments_number_is_right = values.length == names.length
+      raise WrongNumberOfArguments.new(fields_number, arguments_number) unless arguments_number_is_right
+      raise FieldWithoutValue.new(uninitialized_fields_names(values)) unless all_fields_initialized?(values)
     end
     private(:check_fields_are_initialized)
 
