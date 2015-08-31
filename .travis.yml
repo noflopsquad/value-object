@@ -4,3 +4,10 @@ rvm:
 
 script:
   - rspec
+
+deploy:
+  provider: rubygems
+  api_key: ENV['rubygems-api-key']
+  gem: value-object
+  on:
+    tags: true
