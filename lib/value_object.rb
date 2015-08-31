@@ -23,9 +23,9 @@ module ValueObject
     define_method(:check_fields_are_initialized) do |values|
       fields_number = names.length
       arguments_number = values.length
-      right_arguments = fields_number == arguments_number
+      arguments_are_right = fields_number == arguments_number
 
-      raise WrongNumberOfArguments.new(fields_number, arguments_number) unless right_arguments      
+      raise WrongNumberOfArguments.new(fields_number, arguments_number) unless arguments_are_right
       raise FieldWithoutValue.new(uninitialized_fields_names(values)) unless uninitialized_fields(values).empty?
     end
     private(:check_fields_are_initialized)
