@@ -1,5 +1,6 @@
-value-object
+value-object 
 ============
+[![Test Coverage](https://codeclimate.com/github/noflopsquad/valueobjects/badges/coverage.svg)](https://codeclimate.com/github/noflopsquad/valueobjects/coverage)
 [![Build Status](https://travis-ci.org/noflopsquad/valueobjects.svg?branch=master)](https://travis-ci.org/noflopsquad/valueobjects)
 [![Code Climate](https://codeclimate.com/github/noflopsquad/valueobjects/badges/gpa.svg)](https://codeclimate.com/github/noflopsquad/valueobjects)
 [![Test Coverage](https://codeclimate.com/github/noflopsquad/valueobjects/badges/coverage.svg)](https://codeclimate.com/github/noflopsquad/valueobjects/coverage)
