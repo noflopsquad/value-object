@@ -114,7 +114,7 @@ class Point
   end
 end
 
-point = Point.new(-5, 3)
+Point.new(-5, 3)
 ValueObject::ViolatedInvariant: Fields values [-5, 3] violate invariant: inside_first_cuadrant
 
 Point.new(6, 3)
