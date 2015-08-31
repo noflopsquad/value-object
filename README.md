@@ -1,4 +1,4 @@
-value-object 
+value-object
 ============
 [![License MIT](http://img.shields.io/badge/license-MIT-green.svg)](http://opensource.org/licenses/MIT)
 [![Test Coverage](https://codeclimate.com/github/noflopsquad/valueobjects/badges/coverage.svg)](https://codeclimate.com/github/noflopsquad/valueobjects/coverage)
@@ -11,7 +11,7 @@ A simple module to provide value objects semantics to a class.
 
 ## Usage
 
-### Fields
+### Constructor and field readers
 
 ```ruby
 require 'value_object'
@@ -32,7 +32,38 @@ point.y
 
 point.x = 3
 NoMethodError: undefined method `x=' for #<Point:0x00000001d1a780 @x=1, @y=2>
+```
 
+### Equality based on values
+
+```ruby
+require 'value_object'
+
+class Point
+  extend ValueObject
+  fields :x, :y
+end
+
+a_point = Point.new(5, 3)
+=> #<Point:0x8d86c1c @x=5, @y=3>
+
+same_point = Point.new(5, 3)
+=> #<Point:0x8d7b858 @x=5, @y=3>
+
+a_point == same_point
+=> true
+
+a_point.eql?(same_point)
+=> true
+
+a_different_point = Point.new(6, 3)
+=> #<Point:0x8d6597c @x=6, @y=3>
+
+a_point == a_different_point
+=> false
+
+a_point.eql?(a_different_point)
+=> false
 ```
 
 ### Invariants
@@ -62,7 +93,4 @@ ValueObject::ViolatedInvariant: Fields values [-5, 3] violate invariant: inside_
 
 Point.new(6, 3)
 ValueObject::ViolatedInvariant: Fields values [6, 3] violate invariant: x_less_than_y
-
 ```
-
-
