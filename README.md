@@ -34,7 +34,7 @@ point.x = 3
 NoMethodError: undefined method `x=' for #<Point:0x00000001d1a780 @x=1, @y=2>
 ```
 
-### Equality based on values
+### Equality based on field values
 
 ```ruby
 require 'value_object'
@@ -63,6 +63,32 @@ a_point == a_different_point
 => false
 
 a_point.eql?(a_different_point)
+=> false
+```
+
+### Hash code based on field values
+
+```ruby
+require 'value_object'
+
+class Point
+  extend ValueObject
+  fields :x, :y
+end
+
+a_point = Point.new(5, 3)
+=> #<Point:0x8d86c1c @x=5, @y=3>
+
+same_point = Point.new(5, 3)
+=> #<Point:0x8d7b858 @x=5, @y=3>
+
+a_point.hash == same_point.hash
+=> true
+
+a_different_point = Point.new(6, 3)
+=> #<Point:0x8d6597c @x=6, @y=3>
+
+a_point.hash == a_different_point.hash
 => false
 ```
 
