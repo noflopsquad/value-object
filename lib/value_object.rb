@@ -7,7 +7,14 @@ module ValueObject
     define_method(:check_invariants) do
     end
 
+    define_method(:check_values) do |values|
+      not_nil_values = values.reject { |value| value.nil? }
+      raise FieldWithoutValue.new(names) unless names.length == not_nil_values.length
+    end
+
     define_method(:initialize) do |*values|
+      check_values values
+
       names.zip(values) do |name, value|
         instance_variable_set(:"@#{name}", value)
       end
@@ -65,6 +72,12 @@ module ValueObject
   class NotDeclaredFields < Exception
     def initialize()
       super "At least one field must be declared"
+    end
+  end
+
+  class FieldWithoutValue < Exception
+    def initialize(fields)
+      super "Declared fields #{fields} must have value"
     end
   end
 end
