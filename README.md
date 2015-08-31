@@ -11,7 +11,7 @@ A simple module to provide value objects semantics to a class.
 ### Fields
 
 ```ruby
-require 'value-object'
+require 'value_object'
 
 class Point
   extend ValueObject
@@ -26,6 +26,9 @@ point.x
 
 point.y
 => 2
+
+point.x = 3
+NoMethodError: undefined method `x=' for #<Point:0x00000001d1a780 @x=1, @y=2>
 
 ```
 
@@ -58,3 +61,5 @@ Point.new(6, 3)
 ValueObject::ViolatedInvariant: Fields values [6, 3] violate invariant: x_less_than_y
 
 ```
+
+
