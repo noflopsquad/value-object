@@ -11,6 +11,7 @@ module ValueObject
       not_nil_values = values.reject { |value| value.nil? }
       raise FieldWithoutValue.new(names) unless names.length == not_nil_values.length
     end
+    private(:check_values)
 
     define_method(:initialize) do |*values|
       check_values values
