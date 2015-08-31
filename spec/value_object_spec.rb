@@ -58,15 +58,14 @@ describe "ValueObject" do
     it "a declared field can't be nil" do
       class DummyWithDeclaredFieldsWithoutValue
         extend ValueObject
-        fields :field
+        fields :x, :y
       end
 
       expect{
-        DummyWithDeclaredFieldsWithoutValue.new nil
-        }.to raise_error(ValueObject::FieldWithoutValue)
+        DummyWithDeclaredFieldsWithoutValue.new 1, nil
+        }.to raise_error(ValueObject::FieldWithoutValue, "Declared fields [:y] must have value")
+      
     end
-
-
   end
 
   describe "forcing invariants" do

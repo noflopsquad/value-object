@@ -7,14 +7,16 @@ module ValueObject
     define_method(:check_invariants) do
     end
 
-    define_method(:check_values) do |values|
-      not_nil_values = values.reject { |value| value.nil? }
-      raise FieldWithoutValue.new(names) unless names.length == not_nil_values.length
+    define_method(:check_fields_are_initialized) do |values|
+      uninitialized_fields = names.zip(values).select { |name, value| value.nil? }
+      uninitialized_fields_names = uninitialized_fields.map { |field| field.first }
+      
+      raise FieldWithoutValue.new(uninitialized_fields_names) unless uninitialized_fields.empty?
     end
-    private(:check_values)
+    private(:check_fields_are_initialized)
 
     define_method(:initialize) do |*values|
-      check_values values
+      check_fields_are_initialized values
 
       names.zip(values) do |name, value|
         instance_variable_set(:"@#{name}", value)
