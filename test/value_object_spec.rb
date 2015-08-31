@@ -1,10 +1,10 @@
-require "./value_object"
+require "./lib/value_object"
 
 describe "ValueObject" do
 
   describe "standard behavior" do
     class Point
-      extend ValueObjects::ValueObject
+      extend ValueObject
       fields :x, :y
     end
 
@@ -38,17 +38,17 @@ describe "ValueObject" do
     it "must at least have one declared field" do
       expect do
         class DummyWithNoFieldsUsingFieldsMethod
-          extend ValueObjects::ValueObject
+          extend ValueObject
           fields
         end
-      end.to raise_error(ValueObjects::NotDeclaredFields)
+      end.to raise_error(ValueObject::NotDeclaredFields)
     end
   end
 
   describe "forcing invariants" do
     it "forces declared invariants" do
       class Point
-        extend ValueObjects::ValueObject
+        extend ValueObject
         fields :x, :y
         invariants :x_less_than_y, :inside_first_cuadrant
 
@@ -63,23 +63,23 @@ describe "ValueObject" do
       end
 
       expect{ Point.new(-5, 3) }.to raise_error(
-        ValueObjects::ViolatedInvariant, "Fields values [-5, 3] violate invariant: inside_first_cuadrant"
+        ValueObject::ViolatedInvariant, "Fields values [-5, 3] violate invariant: inside_first_cuadrant"
       )
 
       expect{ Point.new(6, 3) }.to raise_error(
-        ValueObjects::ViolatedInvariant, "Fields values [6, 3] violate invariant: x_less_than_y"
+        ValueObject::ViolatedInvariant, "Fields values [6, 3] violate invariant: x_less_than_y"
       )
     end
 
     it "raises an exception when a declared invariant has not been implemented" do
       class PairOfIntegers
-        extend ValueObjects::ValueObject
+        extend ValueObject
         fields :x, :y
         invariants :integers
       end
 
       expect{ PairOfIntegers.new(5, 2) }.to raise_error(
-        ValueObjects::NotImplementedInvariant, "Invariant integers needs to be implemented"
+        ValueObject::NotImplementedInvariant, "Invariant integers needs to be implemented"
       )
     end
   end

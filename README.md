@@ -1,1 +1,1 @@
-A simple module to give value objects semantics to a class.
+A simple module to provide value objects semantics to a class.
