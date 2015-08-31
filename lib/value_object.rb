@@ -23,12 +23,16 @@ module ValueObject
     end
     private(:check_fields_are_initialized)
 
-    define_method(:initialize) do |*values|
-      check_fields_are_initialized(values)
-
+    define_method(:set_instance_variables) do |values|
       names.zip(values) do |name, value|
         instance_variable_set(:"@#{name}", value)
       end
+    end
+    private(:set_instance_variables)
+
+    define_method(:initialize) do |*values|
+      check_fields_are_initialized(values)
+      set_instance_variables(values)
       check_invariants()
     end
 
