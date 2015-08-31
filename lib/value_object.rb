@@ -6,6 +6,7 @@ module ValueObject
 
     define_method(:check_invariants) do
     end
+    private(:check_invariants)
 
     define_method(:check_fields_are_initialized) do |values|
       fields_number = names.length
