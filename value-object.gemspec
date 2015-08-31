@@ -9,4 +9,6 @@ Gem::Specification.new do |s|
   s.files       = ["lib/value_object.rb"]
   s.homepage    = 'http://rubygems.org/gems/value-object'
   s.license     = 'MIT'
+
+  s.add_development_dependency 'rspec', '>= 3.0'
 end
