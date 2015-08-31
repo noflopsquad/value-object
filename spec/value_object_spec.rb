@@ -44,17 +44,6 @@ describe "ValueObject" do
       end.to raise_error(ValueObject::NotDeclaredFields)
     end
 
-    it "must have value for each declared field" do
-      class DummyWithDeclaredFieldsWithoutValue
-        extend ValueObject
-        fields :field
-      end
-
-      expect{
-        DummyWithDeclaredFieldsWithoutValue.new
-        }.to raise_error(ValueObject::FieldWithoutValue)
-    end
-
     it "a declared field can't be nil" do
       class DummyWithDeclaredFieldsWithoutValue
         extend ValueObject
@@ -65,6 +54,27 @@ describe "ValueObject" do
         DummyWithDeclaredFieldsWithoutValue.new 1, nil
         }.to raise_error(ValueObject::FieldWithoutValue, "Declared fields [:y] must have value")
       
+    end
+    
+    it "must have value for each declared field" do
+      class DummyWithDeclaredFieldsWithoutValue
+        extend ValueObject
+        fields :field
+      end
+
+      expect{
+        DummyWithDeclaredFieldsWithoutValue.new
+        }.to raise_error(ValueObject::WrongNumberOfArguments)
+    end
+
+
+    it "can't be initialized with more values than the declared fields" do
+      class Point
+        extend ValueObject
+        fields :x, :y
+      end
+
+      expect{ Point.new 1, 2, 3 }.to raise_error(ValueObject::WrongNumberOfArguments, "Declared 2 fields but passing 3")
     end
   end
 

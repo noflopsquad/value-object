@@ -8,6 +8,11 @@ module ValueObject
     end
 
     define_method(:check_fields_are_initialized) do |values|
+      fields_number = names.length
+      arguments_number = values.length
+
+      raise WrongNumberOfArguments.new(fields_number, arguments_number) unless fields_number == arguments_number
+
       uninitialized_fields = names.zip(values).select { |name, value| value.nil? }
       uninitialized_fields_names = uninitialized_fields.map { |field| field.first }
       
@@ -81,6 +86,12 @@ module ValueObject
   class FieldWithoutValue < Exception
     def initialize(fields)
       super "Declared fields #{fields} must have value"
+    end
+  end
+
+  class WrongNumberOfArguments < Exception
+    def initialize fields_number, arguments_number
+      super "Declared #{fields_number} fields but passing #{arguments_number}"
     end
   end
 end
