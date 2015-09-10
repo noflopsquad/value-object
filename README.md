@@ -21,16 +21,16 @@ class Point
 end
 
 point = Point.new(1, 2)
-=> #<Point:0x00000001d1a780 @x=1, @y=2>
+# => #<Point:0x00000001d1a780 @x=1, @y=2>
 
 point.x
-=> 1
+# => 1
 
 point.y
-=> 2
+# => 2
 
 point.x = 3
-NoMethodError: undefined method `x=' for #<Point:0x00000001d1a780 @x=1, @y=2>
+# NoMethodError: undefined method `x=' for #<Point:0x00000001d1a780 @x=1, @y=2>
 ```
 
 ### Equality based on field values
@@ -44,25 +44,25 @@ class Point
 end
 
 a_point = Point.new(5, 3)
-=> #<Point:0x8d86c1c @x=5, @y=3>
+# => #<Point:0x8d86c1c @x=5, @y=3>
 
 same_point = Point.new(5, 3)
-=> #<Point:0x8d7b858 @x=5, @y=3>
+# => #<Point:0x8d7b858 @x=5, @y=3>
 
 a_point == same_point
-=> true
+# => true
 
 a_point.eql?(same_point)
-=> true
+# => true
 
 a_different_point = Point.new(6, 3)
-=> #<Point:0x8d6597c @x=6, @y=3>
+# => #<Point:0x8d6597c @x=6, @y=3>
 
 a_point == a_different_point
-=> false
+# => false
 
 a_point.eql?(a_different_point)
-=> false
+# => false
 ```
 
 ### Hash code based on field values
@@ -76,19 +76,19 @@ class Point
 end
 
 a_point = Point.new(5, 3)
-=> #<Point:0x8d86c1c @x=5, @y=3>
+# => #<Point:0x8d86c1c @x=5, @y=3>
 
 same_point = Point.new(5, 3)
-=> #<Point:0x8d7b858 @x=5, @y=3>
+# => #<Point:0x8d7b858 @x=5, @y=3>
 
 a_point.hash == same_point.hash
-=> true
+# => true
 
 a_different_point = Point.new(6, 3)
-=> #<Point:0x8d6597c @x=6, @y=3>
+# => #<Point:0x8d6597c @x=6, @y=3>
 
 a_point.hash == a_different_point.hash
-=> false
+# => false
 ```
 
 ### Invariants
@@ -114,11 +114,11 @@ class Point
 end
 
 Point.new(-5, 3)
-ValueObject::ViolatedInvariant: Fields values [-5, 3] violate invariant: inside_first_cuadrant
+# ValueObject::ViolatedInvariant: Fields values [-5, 3] violate invariant: inside_first_cuadrant
 
 Point.new(6, 3)
-ValueObject::ViolatedInvariant: Fields values [6, 3] violate invariant: x_less_than_y
+# ValueObject::ViolatedInvariant: Fields values [6, 3] violate invariant: x_less_than_y
 
 Point.new(1, 3)
-=> #<Point:0x894aacc @x=1, @y=3>
+# => #<Point:0x894aacc @x=1, @y=3>
 ```
