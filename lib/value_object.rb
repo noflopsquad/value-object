@@ -6,6 +6,29 @@ module ValueObject
 
     attr_reader(*names)
 
+    define_method(:initialize) do |*values|
+      check_fields_are_initialized(values)
+      set_instance_variables(values)
+      check_invariants()
+    end
+
+    define_method(:eql?) do |other|
+      self.class == other.class && values == other.values
+    end
+
+    define_method(:==) do |other|
+      eql?(other)
+    end
+
+    define_method(:hash) do
+      self.class.hash ^ values.hash
+    end
+
+    define_method(:values) do
+      names.map { |field| send(field) }
+    end
+    protected(:values)
+
     define_method(:check_invariants) do
     end
     private(:check_invariants)
@@ -40,29 +63,6 @@ module ValueObject
       end
     end
     private(:set_instance_variables)
-
-    define_method(:initialize) do |*values|
-      check_fields_are_initialized(values)
-      set_instance_variables(values)
-      check_invariants()
-    end
-
-    define_method(:values) do
-      names.map { |field| send(field) }
-    end
-    protected(:values)
-
-    define_method(:eql?) do |other|
-      self.class == other.class && values == other.values
-    end
-
-    define_method(:==) do |other|
-      eql?(other)
-    end
-
-    define_method(:hash) do
-      self.class.hash ^ values.hash
-    end
   end
 
   def invariants(*predicate_symbols)
