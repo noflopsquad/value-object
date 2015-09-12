@@ -96,7 +96,7 @@ a_point.hash == a_different_point.hash
 You can declare invariants to restrict field values on initialization
 
 ```ruby
-require 'value-object'
+require 'value_object'
 
 class Point
   extend ValueObject
