@@ -33,6 +33,19 @@ module ValueObject
     end
     private(:check_invariants)
 
+    define_method(:check_fields_are_initialized) do |values|
+      raise WrongNumberOfArguments.new(names.length, values.length) unless arguments_number_is_right?(values)
+      raise FieldWithoutValue.new(uninitialized_fields_names(values)) unless all_fields_initialized?(values)
+    end
+    private(:check_fields_are_initialized)
+
+    define_method(:arguments_number_is_right?) do |values|
+      fields_number = names.length
+      arguments_number = values.length
+      values.length == names.length
+    end
+    private(:arguments_number_is_right?)
+
     define_method(:uninitialized_fields) do |values|
       names.zip(values).select { |name, value| value.nil? }
     end
@@ -47,15 +60,6 @@ module ValueObject
       uninitialized_fields(values).map { |field| field.first }
     end
     private(:uninitialized_fields_names)
-
-    define_method(:check_fields_are_initialized) do |values|
-      fields_number = names.length
-      arguments_number = values.length
-      arguments_number_is_right = values.length == names.length
-      raise WrongNumberOfArguments.new(fields_number, arguments_number) unless arguments_number_is_right
-      raise FieldWithoutValue.new(uninitialized_fields_names(values)) unless all_fields_initialized?(values)
-    end
-    private(:check_fields_are_initialized)
 
     define_method(:set_instance_variables) do |values|
       names.zip(values) do |name, value|
