@@ -1,1 +1,6 @@
+## build artifacts
 *.gem
+
+## environment normalisation
+/.bundle/
+/vendor/bundle
