@@ -5,7 +5,7 @@ describe "ValueObject" do
 
   describe "standard behavior" do
     class Point
-      extend ValueObject
+      include ValueObject
       fields :x, :y
     end
 
@@ -62,7 +62,7 @@ describe "ValueObject" do
 
       it "must have number of values equal to number of fields" do
         class Point
-          extend ValueObject
+          include ValueObject
           fields :x, :y
         end
 
@@ -80,7 +80,7 @@ describe "ValueObject" do
   describe "forcing invariants" do
     it "forces declared invariants" do
       class Point
-        extend ValueObject
+        include ValueObject
         fields :x, :y
         invariants :x_less_than_y, :inside_first_quadrant
 
