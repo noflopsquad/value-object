@@ -1,5 +1,5 @@
 require 'spec_helper'
-require "./lib/value_object"
+require './lib/value_object'
 
 describe "ValueObject" do
 
@@ -38,40 +38,41 @@ describe "ValueObject" do
   describe "restrictions" do
     describe "on declaration" do
       it "must at least have one field" do
-        expect do
-          class DummyWithNoFieldsUsingFieldsMethod
-            extend ValueObject
+        expect {
+          class Point
+            include ValueObject
             fields
           end
-        end.to raise_error(ValueObject::NotDeclaredFields)
+        }.to raise_error(ValueObject::NotDeclaredFields)
       end
     end
 
     describe "on initialization" do
       it "must not have any field initialized to nil" do
-        class DummyWithDeclaredFieldsWithoutValue
-          extend ValueObject
+        class Point
+          include ValueObject
           fields :x, :y
         end
 
-        expect{
-          DummyWithDeclaredFieldsWithoutValue.new 1, nil
-          }.to raise_error(ValueObject::FieldWithoutValue, "Declared fields [:y] must have value")
-        
+        expect {
+          Point.new 1, nil
+        }.to raise_error(ValueObject::FieldWithoutValue, "Declared fields [:y] must have value")
+
       end
-      
+
       it "must have number of values equal to number of fields" do
         class Point
           extend ValueObject
           fields :x, :y
         end
- 
-        expect{
-          Point.new(1)
-          }.to raise_error(ValueObject::WrongNumberOfArguments)
-        
 
-        expect{ Point.new(1, 2, 3) }.to raise_error(ValueObject::WrongNumberOfArguments, "Declared 2 fields but passing 3")
+        expect {
+          Point.new(1)
+        }.to raise_error(ValueObject::WrongNumberOfArguments)
+
+        expect {
+          Point.new(1, 2, 3) 
+        }.to raise_error(ValueObject::WrongNumberOfArguments, "Declared 2 fields but passing 3")
       end
     end
   end
@@ -84,34 +85,34 @@ describe "ValueObject" do
         invariants :x_less_than_y, :inside_first_quadrant
 
         private
-        def inside_first_quadrant
-          x > 0 && y > 0
-        end
-
         def x_less_than_y
           x < y
         end
+
+        def inside_first_quadrant
+          x > 0 && y > 0
+        end
       end
 
-      expect{ Point.new(-5, 3) }.to raise_error(
-        ValueObject::ViolatedInvariant, "Fields values [-5, 3] violate invariant: inside_first_quadrant"
-      )
+      expect {
+        Point.new(6, 3)
+      }.to raise_error(ValueObject::ViolatedInvariant, "Fields values [6, 3] violate invariant: x_less_than_y")
 
-      expect{ Point.new(6, 3) }.to raise_error(
-        ValueObject::ViolatedInvariant, "Fields values [6, 3] violate invariant: x_less_than_y"
-      )
+      expect {
+        Point.new(-5, 3)
+      }.to raise_error(ValueObject::ViolatedInvariant, "Fields values [-5, 3] violate invariant: inside_first_quadrant")
     end
 
     it "raises an exception when a declared invariant has not been implemented" do
-      class PairOfIntegers
-        extend ValueObject
+      class Point
+        include ValueObject
         fields :x, :y
         invariants :integers
       end
 
-      expect{ PairOfIntegers.new(5, 2) }.to raise_error(
-        ValueObject::NotImplementedInvariant, "Invariant integers needs to be implemented"
-      )
+      expect {
+        Point.new(5, 2)
+      }.to raise_error(ValueObject::NotImplementedInvariant, "Invariant integers needs to be implemented")
     end
   end
 end
