@@ -38,7 +38,7 @@ module ValueObject
   end
 
   def predicates
-    self.class.predicate_symbols
+    self.class.predicates
   end
 
   def check_fields_are_initialized
@@ -71,10 +71,18 @@ module ValueObject
   def check_invariants
     return if predicates.nil?
 
-    predicates.each do |predicate|
-      valid = invariant_holds?(predicate)
-      raise ViolatedInvariant.new(predicate, values) unless valid
+    if predicates[:implicit_invariants]
+      valid = instance_eval(&predicates[:implicit_invariants])
+      raise ViolatedInvariant.new("implicit", values) unless valid
     end
+
+    if predicates[:explicit_invariants]
+      predicates[:explicit_invariants].each do |predicate|
+        valid = invariant_holds?(predicate)
+        raise ViolatedInvariant.new(predicate, values) unless valid
+      end
+    end
+
   end
 
   def invariant_holds?(predicate_symbol)
@@ -90,8 +98,8 @@ module ValueObject
       @field_names
     end
 
-    def predicate_symbols
-      @predicate_symbols
+    def predicates
+      { implicit_invariants: @predicate_block, explicit_invariants: @predicate_symbols }
     end
 
     def fields(*names)
@@ -101,8 +109,12 @@ module ValueObject
       @field_names = names
     end
 
-    def invariants(*predicate_symbols)
-      @predicate_symbols = predicate_symbols
+    def invariants(*predicate_symbols, &predicate_block)
+      raise BadInvariantDefinition.new if (predicate_symbols.empty? && !block_given?) || (!predicate_symbols.empty? && block_given?)
+
+      @predicate_symbols = predicate_symbols unless block_given?
+      @predicate_block = predicate_block
     end
   end
+
 end
