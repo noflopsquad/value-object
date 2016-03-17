@@ -24,7 +24,7 @@ module ValueObject
   end
 
   class WrongNumberOfArguments < Exception
-    def initialize fields_number, arguments_number
+    def initialize(fields_number, arguments_number)
       super "Declared #{fields_number} fields but passing #{arguments_number}"
     end
   end

@@ -16,7 +16,7 @@ A simple module to provide value objects semantics to a class.
 require 'value_object'
 
 class Point
-  extend ValueObject
+  include ValueObject
   fields :x, :y
 end
 
@@ -39,7 +39,7 @@ point.x = 3
 require 'value_object'
 
 class Point
-  extend ValueObject
+  include ValueObject
   fields :x, :y
 end
 
@@ -71,7 +71,7 @@ a_point.eql?(a_different_point)
 require 'value_object'
 
 class Point
-  extend ValueObject
+  include ValueObject
   fields :x, :y
 end
 
@@ -99,7 +99,7 @@ You can declare invariants to restrict field values on initialization
 require 'value_object'
 
 class Point
-  extend ValueObject
+  include ValueObject
   fields :x, :y
   invariants :x_less_than_y, :inside_first_quadrant
 
