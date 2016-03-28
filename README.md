@@ -93,7 +93,33 @@ a_point.hash == a_different_point.hash
 
 ### Invariants
 
-You can declare invariants to restrict field values on initialization
+You can declare invariants to restrict field values on initialization,
+both in an implicit or explicit way:
+
+#### Implicit definition
+
+```ruby
+require 'value_object'
+
+class Point
+  include ValueObject
+  fields :x, :y
+  invariants do
+    x < y
+  end
+end
+
+Point.new(-5, 3)
+# ValueObject::ViolatedInvariant: Fields values [-5, 3] violate invariant: implicit
+
+Point.new(6, 3)
+# ValueObject::ViolatedInvariant: Fields values [6, 3] violate invariant: implicit
+
+Point.new(1, 3)
+# => #<Point:0x894aacc @x=1, @y=3>
+```
+
+#### Explicit definition
 
 ```ruby
 require 'value_object'

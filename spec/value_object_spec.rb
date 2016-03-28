@@ -37,7 +37,7 @@ describe "ValueObject" do
 
   describe "restrictions" do
     describe "on declaration" do
-      it "must at least have one field" do
+      it "must have at least one field" do
         expect {
           class Point
             include ValueObject
@@ -78,41 +78,96 @@ describe "ValueObject" do
   end
 
   describe "forcing invariants" do
-    it "forces declared invariants" do
-      class Point
-        include ValueObject
-        fields :x, :y
-        invariants :x_less_than_y, :inside_first_quadrant
-
-        private
-        def x_less_than_y
-          x < y
-        end
-
-        def inside_first_quadrant
-          x > 0 && y > 0
-        end
+    describe "on declaration" do
+      it "some invariant must be defined" do
+        expect {
+          class Point
+            include ValueObject
+            fields :x, :y
+            invariants
+          end
+        }.to raise_error(ValueObject::BadInvariantDefinition)
       end
 
-      expect {
-        Point.new(6, 3)
-      }.to raise_error(ValueObject::ViolatedInvariant, "Fields values [6, 3] violate invariant: x_less_than_y")
-
-      expect {
-        Point.new(-5, 3)
-      }.to raise_error(ValueObject::ViolatedInvariant, "Fields values [-5, 3] violate invariant: inside_first_quadrant")
+      it "cannot define both implicit and explicit invariants" do
+        expect {
+          class Point
+            include ValueObject
+            fields :x, :y
+            invariants :x_less_than_y, :inside_first_quadrant do
+              y % 2 == 0
+            end
+          end
+        }.to raise_error(ValueObject::BadInvariantDefinition)
+      end
     end
 
-    it "raises an exception when a declared invariant has not been implemented" do
-      class Point
-        include ValueObject
-        fields :x, :y
-        invariants :integers
+    describe "on initialization" do
+
+      it "forces implicit invariants with several conditions" do
+        class Point
+          include ValueObject
+          fields :x, :y
+          invariants do
+            x < y
+          end
+        end
+
+        expect {
+          Point.new(6, 3)
+        }.to raise_error(ValueObject::ViolatedInvariant, "Field values [6, 3] violate invariant: implicit")
       end
 
-      expect {
-        Point.new(5, 2)
-      }.to raise_error(ValueObject::NotImplementedInvariant, "Invariant integers needs to be implemented")
+      it "forces implicit invariants" do
+        class Point
+          include ValueObject
+          fields :x, :y
+          invariants do
+            x < y
+          end
+        end
+
+        expect {
+          Point.new(6, 3)
+        }.to raise_error(ValueObject::ViolatedInvariant, "Field values [6, 3] violate invariant: implicit")
+      end
+
+      it "forces explicit invariants" do
+        class Point
+          include ValueObject
+          fields :x, :y
+          invariants :x_less_than_y, :inside_first_quadrant
+
+          private
+          def x_less_than_y
+            x < y
+          end
+
+          def inside_first_quadrant
+            x > 0 && y > 0
+          end
+        end
+
+        expect {
+          Point.new(6, 3)
+        }.to raise_error(ValueObject::ViolatedInvariant, "Field values [6, 3] violate invariant: x_less_than_y")
+
+        expect {
+          Point.new(-5, 3)
+        }.to raise_error(ValueObject::ViolatedInvariant, "Field values [-5, 3] violate invariant: inside_first_quadrant")
+      end
+
+      it "raises an exception when a declared invariant has not been implemented" do
+        class Point
+          include ValueObject
+          fields :x, :y
+          invariants :integers
+        end
+
+        expect {
+          Point.new(5, 2)
+        }.to raise_error(ValueObject::NotImplementedInvariant, "Invariant integers needs to be implemented")
+      end
     end
   end
 end

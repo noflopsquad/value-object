@@ -1,4 +1,10 @@
 module ValueObject
+  class BadInvariantDefinition < Exception
+    def initialize()
+      super "Invariant must be either declared or specified"
+    end
+  end
+
   class NotImplementedInvariant < Exception
     def initialize(name)
       super "Invariant #{name} needs to be implemented"
@@ -7,7 +13,7 @@ module ValueObject
 
   class ViolatedInvariant < Exception
     def initialize(name, wrong_values)
-      super "Fields values " + wrong_values.to_s + " violate invariant: #{name}"
+      super "Field values " + wrong_values.to_s + " violate invariant: #{name}"
     end
   end
 
