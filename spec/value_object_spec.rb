@@ -25,6 +25,22 @@ describe "ValueObject" do
       expect(a_value_object).to_not eq(different_value_object)
     end
 
+    it "generates same hash code on different ruby processes" do
+      rd1, wr1 = IO.pipe
+      rd2, wr2 = IO.pipe
+      pid1 = spawn("ruby ./spec/test_program.rb", :out=>wr1)
+      pid2 = spawn("ruby ./spec/test_program.rb", :out=>wr2)
+      wr1.close
+      wr2.close
+      _1, status1 = Process.waitpid2(pid1)
+      _2, status2 = Process.waitpid2(pid2)
+
+      first_process_object_hash = rd1.read
+      second_process_object_hash = rd2.read
+
+      expect(first_process_object_hash).to eq(second_process_object_hash)
+    end
+
     it "provides hash code generation based on declared fields values" do
       a_value_object = Point.new(5, 3)
       same_value_object = Point.new(5, 3)

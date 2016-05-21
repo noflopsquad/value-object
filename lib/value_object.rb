@@ -1,4 +1,4 @@
-require 'exceptions'
+require './lib/exceptions'
 
 module ValueObject
 
